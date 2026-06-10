@@ -112,3 +112,25 @@ The solution is architected for zero-reconfiguration deployments on remote virtu
 1.  **Network Firewall Rule**: Map inbound communication slots for TCP ports `22` (SSH Access), `80` (Web UI traffic), and `8080` (API engine).
 2.  **Continuous Synchronization**: Remote runtime pulling is handled exclusively via automated Git replication hooks directly inside target Ubuntu hosts.
 3.  **Dynamic DDNS Routing**: Public instance IP adjustments are handled seamlessly via periodic 5-minute cron execution tasks mapped directly onto personal [DuckDNS](https://duckdns.org) registry blocks.
+
+
+---
+
+## Future Improvements & Scalability Roadmap
+
+While the application is fully functional and optimized for runtime isolation, the following architectural enhancements are planned for future production scales:
+
+1. **Enterprise-Grade Global Exception Handling**:
+   * Standardize backend error formats by fully mapping Spring Boot `GlobalExceptionHandler` payloads.
+   * Eliminate ambiguous 500 server crashes from network errors, converting them into structured, localized client-facing telemetry (e.g., precise database locks, specific scheduling validation rejections).
+
+2. **Automated CI/CD Pipeline (GitHub Actions)**:
+   * Build an automated workflow that executes on every pull request to `main`.
+   * Automatically run backend Gradle tests, frontend Vite linter routines, and orchestrate zero-downtime rolling upgrades directly into the AWS EC2 environment using remote Docker commands.
+
+3. **Rigorous Test Coverage**:
+   * **Backend**: Implement integration tests with `Testcontainers` to mock actual PostgreSQL persistence layers instead of shallow memory mocks.
+   * **Frontend**: Integrate Component Testing using Vitest and Playwright to catch edge cases in real-time UI data manipulation.
+
+4. **Edge Security & Transport Encryption**:
+   * Wrap the Nginx Reverse Proxy with an automated SSL layer via an isolated Certbot mesh to fully enforce TLS 1.3 encryption across all client-edge topologies.
